@@ -37,6 +37,7 @@ foreach ($raw in $lines) {
 Save-Current
 
 $unique = $items | Group-Object idiom | ForEach-Object { $_.Group[0] } | Sort-Object year,idiom
+foreach ($item in $unique) { if ($item.idiom -eq '比喻生活' -and $item.meaning -like '極為窮困*') { $item.idiom = '捉襟見肘'; $item.meaning = '比喻生活' + $item.meaning } }
 $json = $unique | ConvertTo-Json -Depth 3 -Compress
 [IO.File]::WriteAllText((Join-Path $PSScriptRoot 'data.js'), "const IDIOMS=$json;", (New-Object Text.UTF8Encoding($false)))
 [PSCustomObject]@{ Count=$unique.Count; First=$unique[0].idiom; Last=$unique[-1].idiom }
